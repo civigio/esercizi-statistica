@@ -1,0 +1,227 @@
+<html>
+<head>
+<title>Exercise.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #bcbec4;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #2aacb8;}
+.s6 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Exercise.ipynb</font>
+</center></td></tr></table>
+<pre><span class="s0">#%% 
+</span><span class="s1">import </span><span class="s2">random</span>
+<span class="s1">import </span><span class="s2">math</span>
+
+<span class="s1">def </span><span class="s2">uniform_range</span><span class="s3">(</span><span class="s2">minimum</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+                  <span class="s2">maximum</span><span class="s3">: </span><span class="s2">float</span><span class="s3">) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Generation of a pseudo-casual number distributed accordingly to uniform distribution between 
+    [minimum, maximum) 
+ 
+    Args: 
+        minimum: lower limit of the range (included) 
+        maximum: upper limit of the range (excluded) 
+ 
+    Returns: 
+        A pseudo-casual numbers generated according to uniform distribution between [minimum, maximum) 
+    &quot;&quot;&quot;</span>
+
+    <span class="s1">return </span><span class="s2">minimum </span><span class="s3">+ (</span><span class="s2">random</span><span class="s3">.</span><span class="s2">random</span><span class="s3">() * (</span><span class="s2">maximum </span><span class="s3">- </span><span class="s2">minimum</span><span class="s3">))</span>
+
+
+<span class="s1">def </span><span class="s2">func</span><span class="s3">(</span><span class="s2">x</span><span class="s3">, </span><span class="s2">G</span><span class="s3">, </span><span class="s2">M</span><span class="s3">):</span>
+    <span class="s1">return </span><span class="s3">(</span><span class="s5">1</span><span class="s3">/</span><span class="s2">math</span><span class="s3">.</span><span class="s2">pi</span><span class="s3">)*(</span><span class="s2">G</span><span class="s3">/((</span><span class="s2">x</span><span class="s3">-</span><span class="s2">M</span><span class="s3">)**</span><span class="s5">2 </span><span class="s3">+ </span><span class="s2">G</span><span class="s3">**</span><span class="s5">2</span><span class="s3">))</span>
+
+<span class="s1">def </span><span class="s2">tac_cauchy</span><span class="s3">(</span><span class="s2">G</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+               <span class="s2">M</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+               <span class="s2">half_width</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+               <span class="s2">seed</span><span class="s3">: </span><span class="s2">float </span><span class="s3">= </span><span class="s5">0.</span><span class="s3">) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Generation of a pseudo-casual number distributed accordingly to the Cauchy distribution 
+    with the try-an-catch algorithm, into a &quot;box&quot; delimited by x_minimum and x_maximum for the 
+    horizontal axis and y_minimum and y_maximum for the vertical axis starting from an optional seed 
+    different from 0. 
+ 
+    Args: 
+        G: parameter of the function 
+        M: parameter of the function 
+        half_width: half width of the interval over the horizontal axis 
+        seed: starting seed for the random generation (optional) 
+ 
+    Returns: 
+        A single number generated with the try-an-catch algorithm 
+    &quot;&quot;&quot;</span>
+    
+    <span class="s1">if </span><span class="s2">seed </span><span class="s3">!= </span><span class="s5">0.</span><span class="s3">:</span>
+        <span class="s2">random</span><span class="s3">.</span><span class="s2">seed</span><span class="s3">(</span><span class="s2">seed</span><span class="s3">)</span>
+    <span class="s2">x </span><span class="s3">= </span><span class="s2">uniform_range</span><span class="s3">(</span><span class="s2">M </span><span class="s3">- </span><span class="s2">half_width</span><span class="s3">, </span><span class="s2">M </span><span class="s3">+ </span><span class="s2">half_width</span><span class="s3">)</span>
+    <span class="s2">y </span><span class="s3">= </span><span class="s2">uniform_range</span><span class="s3">(</span><span class="s5">0</span><span class="s3">, </span><span class="s5">1</span><span class="s3">/(</span><span class="s2">math</span><span class="s3">.</span><span class="s2">pi</span><span class="s3">*</span><span class="s2">G</span><span class="s3">))</span>
+
+    <span class="s1">while </span><span class="s2">y </span><span class="s3">&gt; </span><span class="s2">func</span><span class="s3">(</span><span class="s2">x</span><span class="s3">, </span><span class="s2">G</span><span class="s3">, </span><span class="s2">M</span><span class="s3">):</span>
+        <span class="s2">x </span><span class="s3">= </span><span class="s2">uniform_range</span><span class="s3">(</span><span class="s2">M </span><span class="s3">- </span><span class="s2">half_width</span><span class="s3">, </span><span class="s2">M </span><span class="s3">+ </span><span class="s2">half_width</span><span class="s3">)</span>
+        <span class="s2">y </span><span class="s3">= </span><span class="s2">uniform_range</span><span class="s3">(</span><span class="s5">0</span><span class="s3">, </span><span class="s5">1</span><span class="s3">/(</span><span class="s2">math</span><span class="s3">.</span><span class="s2">pi</span><span class="s3">*</span><span class="s2">G</span><span class="s3">))</span>
+    <span class="s1">return </span><span class="s2">x</span>
+<span class="s0">#%% 
+</span><span class="s2">N </span><span class="s3">= </span><span class="s5">10000</span>
+<span class="s2">data </span><span class="s3">= []</span>
+
+<span class="s2">gamma </span><span class="s3">= </span><span class="s5">5</span>
+<span class="s2">M </span><span class="s3">= </span><span class="s5">3</span>
+
+<span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range</span><span class="s3">(</span><span class="s2">N</span><span class="s3">):</span>
+    <span class="s2">data</span><span class="s3">.</span><span class="s2">append</span><span class="s3">(</span><span class="s2">tac_cauchy</span><span class="s3">(</span><span class="s2">gamma</span><span class="s3">, </span><span class="s2">M</span><span class="s3">, </span><span class="s5">3</span><span class="s3">*</span><span class="s2">gamma</span><span class="s3">))</span>
+<span class="s0">#%% 
+</span><span class="s1">import </span><span class="s2">matplotlib</span><span class="s3">.</span><span class="s2">pyplot </span><span class="s1">as </span><span class="s2">plt</span>
+<span class="s1">import </span><span class="s2">numpy </span><span class="s1">as </span><span class="s2">np</span>
+
+<span class="s1">def </span><span class="s2">sturges</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">: </span><span class="s2">list</span><span class="s3">[</span><span class="s2">float</span><span class="s3">]) </span><span class="s2">-&gt; int</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Calculation of the optimal number of bins to plot a histogram using the sturges rule 
+ 
+    Args: 
+        sample: list of floats representing data 
+ 
+    Returns: 
+        The number of bins according to sturges rule 
+    &quot;&quot;&quot;</span>
+
+    <span class="s1">return </span><span class="s2">int</span><span class="s3">(</span><span class="s2">math</span><span class="s3">.</span><span class="s2">ceil</span><span class="s3">(</span><span class="s5">1 </span><span class="s3">+ </span><span class="s5">3.322 </span><span class="s3">* </span><span class="s2">math</span><span class="s3">.</span><span class="s2">log</span><span class="s3">(</span><span class="s2">len</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">))))</span>
+
+<span class="s2">bin_content</span><span class="s3">, </span><span class="s2">bin_edges </span><span class="s3">= </span><span class="s2">np</span><span class="s3">.</span><span class="s2">histogram</span><span class="s3">(</span><span class="s2">data</span><span class="s3">, </span><span class="s2">bins</span><span class="s3">=</span><span class="s2">np</span><span class="s3">.</span><span class="s2">linspace</span><span class="s3">(</span><span class="s2">math</span><span class="s3">.</span><span class="s2">floor</span><span class="s3">(</span><span class="s2">min</span><span class="s3">(</span><span class="s2">data</span><span class="s3">)), </span><span class="s2">math</span><span class="s3">.</span><span class="s2">ceil</span><span class="s3">(</span><span class="s2">max</span><span class="s3">(</span><span class="s2">data</span><span class="s3">)), </span><span class="s2">sturges</span><span class="s3">(</span><span class="s2">data</span><span class="s3">)))</span>
+
+<span class="s2">fig</span><span class="s3">, </span><span class="s2">ax </span><span class="s3">= </span><span class="s2">plt</span><span class="s3">.</span><span class="s2">subplots</span><span class="s3">(</span><span class="s5">1</span><span class="s3">, </span><span class="s5">1</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">hist</span><span class="s3">(</span><span class="s2">data</span><span class="s3">, </span><span class="s2">bins</span><span class="s3">=</span><span class="s2">bin_edges</span><span class="s3">, </span><span class="s2">label</span><span class="s3">=</span><span class="s6">&quot;Generated data&quot;</span><span class="s3">)</span>
+<span class="s2">plt</span><span class="s3">.</span><span class="s2">plot</span><span class="s3">([</span><span class="s2">M</span><span class="s3">, </span><span class="s2">M</span><span class="s3">], </span><span class="s2">ax</span><span class="s3">.</span><span class="s2">get_ylim</span><span class="s3">())</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">set_title</span><span class="s3">(</span><span class="s6">&quot;TAC-Cauchy distribution&quot;</span><span class="s3">, </span><span class="s2">size</span><span class="s3">=</span><span class="s5">14</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">set_xlabel</span><span class="s3">(</span><span class="s6">&quot;x&quot;</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">set_ylabel</span><span class="s3">(</span><span class="s6">&quot;dx/dN&quot;</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">grid</span><span class="s3">(</span><span class="s1">True</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">.</span><span class="s2">legend</span><span class="s3">()</span>
+<span class="s2">plt</span><span class="s3">.</span><span class="s2">show</span><span class="s3">()</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">mean</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">: </span><span class="s2">list</span><span class="s3">[</span><span class="s2">float</span><span class="s3">]) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Calculation of the mean of the sample present in the object 
+ 
+    Args: 
+        sample: list of floats representing data 
+ 
+    Returns: 
+        The mean of the sample 
+    &quot;&quot;&quot;</span>
+
+    <span class="s2">summ </span><span class="s3">= </span><span class="s2">sum</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">)</span>
+    <span class="s2">n </span><span class="s3">= </span><span class="s2">len</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">)</span>
+    <span class="s1">return </span><span class="s2">summ </span><span class="s3">/ </span><span class="s2">n</span>
+
+<span class="s1">def </span><span class="s2">variance</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">: </span><span class="s2">list</span><span class="s3">[</span><span class="s2">float</span><span class="s3">],</span>
+             <span class="s2">bessel</span><span class="s3">: </span><span class="s2">bool </span><span class="s3">= </span><span class="s1">True</span><span class="s3">) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Calculation of the variance of the sample present in the object 
+ 
+    Args: 
+        sample: list of floats representing data 
+        bessel: applies the bessel correction (optional, default: True) 
+ 
+    Returns: 
+        The variance of the sample 
+    &quot;&quot;&quot;</span>
+
+    <span class="s2">summ </span><span class="s3">= </span><span class="s5">0.</span>
+    <span class="s2">sum_sq </span><span class="s3">= </span><span class="s5">0.</span>
+    <span class="s2">n </span><span class="s3">= </span><span class="s2">len</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">)</span>
+    <span class="s1">for </span><span class="s2">elem </span><span class="s1">in </span><span class="s2">sample</span><span class="s3">:</span>
+        <span class="s2">summ </span><span class="s3">+= </span><span class="s2">elem</span>
+        <span class="s2">sum_sq </span><span class="s3">+= </span><span class="s2">elem </span><span class="s3">* </span><span class="s2">elem</span>
+    <span class="s2">var </span><span class="s3">= </span><span class="s2">sum_sq </span><span class="s3">/ </span><span class="s2">n </span><span class="s3">- </span><span class="s2">summ </span><span class="s3">* </span><span class="s2">summ </span><span class="s3">/ (</span><span class="s2">n </span><span class="s3">* </span><span class="s2">n</span><span class="s3">)</span>
+    <span class="s1">if </span><span class="s2">bessel</span><span class="s3">:</span>
+        <span class="s2">var </span><span class="s3">= </span><span class="s2">n </span><span class="s3">* </span><span class="s2">var </span><span class="s3">/ (</span><span class="s2">n </span><span class="s3">- </span><span class="s5">1</span><span class="s3">)</span>
+    <span class="s1">return </span><span class="s2">var</span>
+
+<span class="s1">def </span><span class="s2">stddev</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">: </span><span class="s2">list</span><span class="s3">[</span><span class="s2">float</span><span class="s3">],</span>
+           <span class="s2">bessel</span><span class="s3">: </span><span class="s2">bool </span><span class="s3">= </span><span class="s1">True</span><span class="s3">) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    <span class="s4">&quot;&quot;&quot; 
+    Calculation of the standard deviation of the sample present in the object 
+ 
+    Args: 
+        sample: list of floats representing data 
+        bessel: applies the bessel correction (optional, default: True) 
+ 
+    Returns: 
+        The standard deviation of the sample 
+    &quot;&quot;&quot;</span>
+
+    <span class="s1">return </span><span class="s2">math</span><span class="s3">.</span><span class="s2">sqrt</span><span class="s3">(</span><span class="s2">variance</span><span class="s3">(</span><span class="s2">sample</span><span class="s3">, </span><span class="s2">bessel</span><span class="s3">))</span>
+<span class="s0">#%% 
+</span><span class="s2">means </span><span class="s3">= []</span>
+<span class="s2">variances </span><span class="s3">= []</span>
+
+<span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range</span><span class="s3">(</span><span class="s5">100</span><span class="s3">):</span>
+    <span class="s2">set_data </span><span class="s3">= []</span>
+    <span class="s1">for </span><span class="s2">j </span><span class="s1">in </span><span class="s2">range</span><span class="s3">(</span><span class="s2">N</span><span class="s3">):</span>
+        <span class="s2">set_data</span><span class="s3">.</span><span class="s2">append</span><span class="s3">(</span><span class="s2">tac_cauchy</span><span class="s3">(</span><span class="s2">gamma</span><span class="s3">, </span><span class="s2">M</span><span class="s3">, (</span><span class="s2">i</span><span class="s3">+</span><span class="s5">1</span><span class="s3">)*</span><span class="s2">gamma</span><span class="s3">))</span>
+    <span class="s2">means</span><span class="s3">.</span><span class="s2">append</span><span class="s3">(</span><span class="s2">mean</span><span class="s3">(</span><span class="s2">set_data</span><span class="s3">))</span>
+    <span class="s2">variances</span><span class="s3">.</span><span class="s2">append</span><span class="s3">(</span><span class="s2">stddev</span><span class="s3">(</span><span class="s2">set_data</span><span class="s3">))</span>
+    
+<span class="s2">print</span><span class="s3">(</span><span class="s2">means</span><span class="s3">, </span><span class="s2">variances</span><span class="s3">)</span>
+<span class="s0">#%% 
+</span><span class="s2">fig</span><span class="s3">, </span><span class="s2">ax </span><span class="s3">= </span><span class="s2">plt</span><span class="s3">.</span><span class="s2">subplots</span><span class="s3">(</span><span class="s2">nrows</span><span class="s3">=</span><span class="s5">2</span><span class="s3">, </span><span class="s2">ncols</span><span class="s3">=</span><span class="s5">1</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">0</span><span class="s3">].</span><span class="s2">errorbar</span><span class="s3">(</span><span class="s2">np</span><span class="s3">.</span><span class="s2">linspace</span><span class="s3">(</span><span class="s5">1</span><span class="s3">, </span><span class="s5">100</span><span class="s3">, </span><span class="s5">100</span><span class="s3">), </span><span class="s2">means</span><span class="s3">, </span><span class="s2">label</span><span class="s3">=</span><span class="s6">&quot;mean values&quot;</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">0</span><span class="s3">].</span><span class="s2">set_title</span><span class="s3">(</span><span class="s6">&quot;Mean&quot;</span><span class="s3">, </span><span class="s2">size</span><span class="s3">=</span><span class="s5">14</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">1</span><span class="s3">].</span><span class="s2">errorbar</span><span class="s3">(</span><span class="s2">np</span><span class="s3">.</span><span class="s2">linspace</span><span class="s3">(</span><span class="s5">1</span><span class="s3">, </span><span class="s5">100</span><span class="s3">, </span><span class="s5">100</span><span class="s3">), </span><span class="s2">variances</span><span class="s3">, </span><span class="s2">label</span><span class="s3">=</span><span class="s6">&quot;sigma values&quot;</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">1</span><span class="s3">].</span><span class="s2">set_title</span><span class="s3">(</span><span class="s6">&quot;Sigma&quot;</span><span class="s3">, </span><span class="s2">size</span><span class="s3">=</span><span class="s5">14</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">0</span><span class="s3">].</span><span class="s2">grid</span><span class="s3">(</span><span class="s1">True</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">1</span><span class="s3">].</span><span class="s2">grid</span><span class="s3">(</span><span class="s1">True</span><span class="s3">)</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">0</span><span class="s3">].</span><span class="s2">legend</span><span class="s3">()</span>
+<span class="s2">ax</span><span class="s3">[</span><span class="s5">1</span><span class="s3">].</span><span class="s2">legend</span><span class="s3">()</span>
+<span class="s2">plt</span><span class="s3">.</span><span class="s2">show</span><span class="s3">()</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">clt_ms_cauchy</span><span class="s3">(</span><span class="s2">G</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+                  <span class="s2">M</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+                  <span class="s2">half_width</span><span class="s3">: </span><span class="s2">float</span><span class="s3">,</span>
+                  <span class="s2">n_sum</span><span class="s3">: </span><span class="s2">int </span><span class="s3">= </span><span class="s5">10</span><span class="s3">) </span><span class="s2">-&gt; float</span><span class="s3">:</span>
+    
+
+    <span class="s2">y </span><span class="s3">= </span><span class="s5">0.</span>
+    <span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range</span><span class="s3">(</span><span class="s2">n_sum</span><span class="s3">):</span>
+        <span class="s2">y </span><span class="s3">+= </span><span class="s2">tac_cauchy</span><span class="s3">(</span><span class="s2">G</span><span class="s3">, </span><span class="s2">M</span><span class="s3">, </span><span class="s2">half_width</span><span class="s3">)</span>
+    <span class="s2">y </span><span class="s3">/= </span><span class="s2">n_sum</span>
+    <span class="s1">return </span><span class="s2">y</span>
+
+<span class="s0">#%% 
+</span><span class="s1">import </span><span class="s2">scipy </span><span class="s1">as </span><span class="s2">sp</span>
+
+<span class="s2">clt </span><span class="s3">= []</span>
+<span class="s1">for </span><span class="s2">t </span><span class="s1">in </span><span class="s2">range</span><span class="s3">(</span><span class="s5">10000</span><span class="s3">):</span>
+    <span class="s2">clt</span><span class="s3">.</span><span class="s2">append</span><span class="s3">(</span><span class="s2">clt_ms_cauchy</span><span class="s3">(</span><span class="s2">gamma</span><span class="s3">, </span><span class="s2">M</span><span class="s3">, </span><span class="s5">3</span><span class="s3">*</span><span class="s2">gamma</span><span class="s3">))</span>
+
+<span class="s2">print</span><span class="s3">(</span><span class="s2">np</span><span class="s3">.</span><span class="s2">mean</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">))</span>
+<span class="s2">print</span><span class="s3">(</span><span class="s2">np</span><span class="s3">.</span><span class="s2">std</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">))</span>
+<span class="s2">print</span><span class="s3">(</span><span class="s2">sp</span><span class="s3">.</span><span class="s2">stats</span><span class="s3">.</span><span class="s2">skew</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">))</span>
+<span class="s2">print</span><span class="s3">(</span><span class="s2">sp</span><span class="s3">.</span><span class="s2">stats</span><span class="s3">.</span><span class="s2">kurtosis</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">))</span>
+<span class="s0">#%% 
+</span><span class="s1">from </span><span class="s2">iminuit </span><span class="s1">import </span><span class="s2">Minuit</span>
+<span class="s1">from </span><span class="s2">iminuit</span><span class="s3">.</span><span class="s2">cost </span><span class="s1">import </span><span class="s2">UnbinnedNLL</span>
+
+<span class="s1">def </span><span class="s2">pdf</span><span class="s3">(</span><span class="s2">x</span><span class="s3">, </span><span class="s2">mu</span><span class="s3">, </span><span class="s2">sigma</span><span class="s3">):</span>
+    <span class="s1">return </span><span class="s2">sp</span><span class="s3">.</span><span class="s2">stats</span><span class="s3">.</span><span class="s2">norm</span><span class="s3">.</span><span class="s2">pdf</span><span class="s3">(</span><span class="s2">x</span><span class="s3">, </span><span class="s2">mu</span><span class="s3">, </span><span class="s2">sigma</span><span class="s3">)</span>
+
+<span class="s2">cost_func </span><span class="s3">= </span><span class="s2">UnbinnedNLL</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">, </span><span class="s2">pdf</span><span class="s3">)</span>
+<span class="s2">my_minuit </span><span class="s3">= </span><span class="s2">Minuit</span><span class="s3">(</span><span class="s2">cost_func</span><span class="s3">, </span><span class="s2">mu</span><span class="s3">=</span><span class="s2">np</span><span class="s3">.</span><span class="s2">mean</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">), </span><span class="s2">sigma</span><span class="s3">=</span><span class="s2">np</span><span class="s3">.</span><span class="s2">std</span><span class="s3">(</span><span class="s2">clt</span><span class="s3">))</span>
+<span class="s2">my_minuit</span><span class="s3">.</span><span class="s2">limits</span><span class="s3">[</span><span class="s6">'sigma'</span><span class="s3">] = (</span><span class="s5">0</span><span class="s3">, </span><span class="s1">None</span><span class="s3">)</span>
+
+<span class="s2">my_minuit</span><span class="s3">.</span><span class="s2">migrad</span><span class="s3">()</span>
+<span class="s2">my_minuit</span><span class="s3">.</span><span class="s2">minos</span><span class="s3">()</span>
+<span class="s2">display</span><span class="s3">(</span><span class="s2">my_minuit</span><span class="s3">)</span></pre>
+</body>
+</html>
